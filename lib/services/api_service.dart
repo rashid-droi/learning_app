@@ -150,8 +150,4 @@ class ApiService {
       throw Exception('Error fetching modules: $e');
     }
   }
-
-
-
-
 }

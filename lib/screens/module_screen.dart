@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:html/parser.dart' as html_parser;
 import '../models/assessment_model.dart';
 import '../models/module_game_model.dart';
+import 'assessment_screen.dart';
 
 class ModuleScreen extends StatefulWidget {
   final String moduleId;
@@ -103,9 +104,40 @@ class _ModuleScreenState extends State<ModuleScreen> {
         title: Text(assessment.title),
         subtitle: Text('Type: ${assessment.type.toUpperCase()}'),
         trailing: const Icon(Icons.arrow_forward_ios, size: 16.0),
-        onTap: () {
-          // Handle assessment tap
-          // Navigator.push(...);
+        onTap: () async {
+          if (assessment.type == 'pre' || assessment.type == 'post' || assessment.type == 'quiz') {
+            // Show loading indicator
+            final shouldProceed = await showDialog<bool>(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('Start ${assessment.type.toUpperCase()} Assessment'),
+                content: const Text('This will start the assessment. Are you ready to begin?'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    child: const Text('CANCEL'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context, true),
+                    child: const Text('START'),
+                  ),
+                ],
+              ),
+            ) ?? false;
+
+            if (shouldProceed && mounted) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AssessmentScreen(
+                    authToken: widget.authToken,
+                    moduleId: assessment.moduleId,
+                    assessmentType: assessment.type,
+                  ),
+                ),
+              );
+            }
+          }
         },
       ),
     );
