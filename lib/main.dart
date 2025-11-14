@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   title: 'Learning App',
   theme: ThemeData(primarySwatch: Colors.blue),
   routes: {
-    '/landing': (_) => const LandingPage(),
+    '/landing': (_) => const LandingScreen(),
     '/login': (_) => const LoginScreen(),
     '/signup': (_) => const SignupScreen(),
     '/courses': (_) => const CoursesScreen(),
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       if (!snapshot.hasData) {
         return const Center(child: CircularProgressIndicator());
       }
-      return snapshot.data! ? const CoursesScreen() : const LoginScreen();
+      return snapshot.data! ? const CoursesScreen() : const CoursesScreen();
     },
   ),
 );
